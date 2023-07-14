@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/Oozaku/bug-bug-tracker/backend/database"
+)
 
 func main() {
-	fmt.Println("Hello world!")
+	database.OpenDatabaseConnection()
 }
