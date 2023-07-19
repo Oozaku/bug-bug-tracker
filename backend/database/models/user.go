@@ -16,3 +16,10 @@ type User struct {
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 	Histories []History
 }
+
+type UserPublic struct {
+	Username string
+	Name     string
+	Role     string
+	Histories []History
+}
