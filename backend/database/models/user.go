@@ -18,8 +18,16 @@ type User struct {
 }
 
 type UserPublic struct {
-	Username string
-	Name     string
-	Role     string
+	Username  string
+	Name      string
+	Role      string
+	Histories []History
+}
+
+type UserPrivate struct {
+	Username  string
+	Email     string
+	Name      string
+	Role      string
 	Histories []History
 }
