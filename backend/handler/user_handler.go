@@ -1,22 +1,32 @@
 package handler
 
 import (
+	"errors"
+
 	"github.com/Oozaku/bug-bug-tracker/backend/database"
 	"github.com/Oozaku/bug-bug-tracker/backend/database/models"
+	"github.com/Oozaku/bug-bug-tracker/backend/selector"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 func GetAllUsers(c *fiber.Ctx) error {
-	var users []models.UserPublic
+	var users []models.User
 
-	result := database.DBConnection.Model(&models.User{}).Find(&users)
+	err := database.DBConnection.Model(&models.User{}).Preload("Histories").Find(&users).Error
 
-	if result.Error != nil {
+	if err != nil {
 		c.Status(500)
 		return nil
 	}
 
-	c.JSON(users)
+	var publicUsers []selector.UserPublicApi
+
+	for _, user := range users {
+		publicUsers = append(publicUsers, selector.GetPublicUserData(user))
+	}
+
+	c.JSON(publicUsers)
 	return nil
 }
 
@@ -26,16 +36,22 @@ func GetSingleUser(c *fiber.Ctx) error {
 	//        https://gorm.io/docs/security.html
 	username := c.Params("username")
 
-	var user models.UserPublic
+	var user models.User
 
-	result := database.DBConnection.Model(&models.User{}).Find(&user, username)
+	err := database.DBConnection.Model(&models.User{}).Preload("Histories").First(&user, "username = ?", username).Error
 
-	if result.Error != nil {
+	if err != nil {
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.Status(404).SendString("User not found")
+			return nil
+		}
+
 		c.Status(500)
 		return nil
 	}
 
-	c.JSON(user)
+	c.JSON(selector.GetPublicUserData(user))
 	return nil
 }
 
@@ -45,15 +61,15 @@ func GetUserHimself(c *fiber.Ctx) error {
 	//        https://gorm.io/docs/security.html
 	username := "admin"
 
-	var user models.UserPrivate
+	var user models.User
 
-	result := database.DBConnection.Model(&models.User{}).Find(&user, username)
+	err := database.DBConnection.Model(&models.User{}).Preload("Histories").Find(&user, "username = ?", username).Error
 
-	if result.Error != nil {
+	if err != nil {
 		c.Status(500)
 		return nil
 	}
 
-	c.JSON(user)
+	c.JSON(selector.GetPrivateUserData(user))
 	return nil
 }
