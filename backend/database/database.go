@@ -13,6 +13,10 @@ var DBConnection *gorm.DB
 
 // TODO: receive connection values from environment
 func OpenDatabaseConnection() {
+	if DBConnection != nil {
+		return
+	}
+
 	host := "localhost"
 	port := "5432"
 	username := "postgres"
