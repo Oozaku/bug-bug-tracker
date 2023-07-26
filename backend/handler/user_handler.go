@@ -6,6 +6,7 @@ import (
 	"github.com/Oozaku/bug-bug-tracker/backend/database"
 	"github.com/Oozaku/bug-bug-tracker/backend/database/models"
 	"github.com/Oozaku/bug-bug-tracker/backend/selector"
+	"github.com/Oozaku/bug-bug-tracker/backend/validator"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )
@@ -31,10 +32,12 @@ func GetAllUsers(c *fiber.Ctx) error {
 }
 
 func GetSingleUser(c *fiber.Ctx) error {
-	// TODO: get username
-	// FIXME: protect me against SQL injection
-	//        https://gorm.io/docs/security.html
 	username := c.Params("username")
+
+	if err := validator.ValidateUsersUsername(username); err != nil {
+		c.Status(400).SendString("Invalid username")
+		return nil
+	}
 
 	var user models.User
 
@@ -56,9 +59,6 @@ func GetSingleUser(c *fiber.Ctx) error {
 }
 
 func GetUserHimself(c *fiber.Ctx) error {
-	// TODO: get username
-	// FIXME: protect me against SQL injection
-	//        https://gorm.io/docs/security.html
 	username := "admin"
 
 	var user models.User
