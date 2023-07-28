@@ -29,3 +29,19 @@ func getUser(username string) (models.User, error) {
 
 	return user, nil
 }
+
+func getUsers(usernames []string) ([]models.User, error) {
+	var users []models.User
+
+	for _, username := range usernames {
+		user, err := getUser(username)
+
+		if err != nil {
+			return users, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
