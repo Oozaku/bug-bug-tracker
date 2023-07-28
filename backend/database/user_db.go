@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func getUser(username string) (models.User, error) {
+func GetUser(username string) (models.User, error) {
 	if err := validator.ValidateUsersUsername(username); err != nil {
 		return models.User{}, err
 	}
@@ -30,11 +30,11 @@ func getUser(username string) (models.User, error) {
 	return user, nil
 }
 
-func getUsers(usernames []string) ([]models.User, error) {
+func GetUsers(usernames []string) ([]models.User, error) {
 	var users []models.User
 
 	for _, username := range usernames {
-		user, err := getUser(username)
+		user, err := GetUser(username)
 
 		if err != nil {
 			return users, err
