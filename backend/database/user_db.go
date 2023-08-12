@@ -15,7 +15,7 @@ func GetUser(username string) (models.User, error) {
 
 	var user models.User
 
-	err := DBConnection.Model(&models.User{}).Preload("Histories").First(
+	err := DBConnection.Model(&models.User{}).First(
 		&user, "username = ?", username,
 	).Error
 
@@ -33,7 +33,12 @@ func GetUser(username string) (models.User, error) {
 func GetUsers(usernames []string) ([]models.User, error) {
 	var users []models.User
 
+	if usernames == nil {
+		return users, nil
+	}
+
 	for _, username := range usernames {
+
 		user, err := GetUser(username)
 
 		if err != nil {

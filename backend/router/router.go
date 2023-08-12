@@ -9,4 +9,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/users", handler.GetAllUsers)
 	app.Get("/users/me", handler.GetUserHimself)
 	app.Get("/users/:username", handler.GetSingleUser)
+
+	app.Post("/issues", handler.CreateIssue)
 }

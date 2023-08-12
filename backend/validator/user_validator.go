@@ -6,7 +6,7 @@ import (
 )
 
 func ValidateUsersUsername(username string) error {
-	if len(username) < 5 || len(username) > 15 {
+	if len(username) < 4 || len(username) > 15 {
 		return errors.New("Username's size is out of range [5, 15]")
 	}
 

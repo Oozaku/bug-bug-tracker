@@ -14,7 +14,7 @@ import (
 func GetAllUsers(c *fiber.Ctx) error {
 	var users []models.User
 
-	err := database.DBConnection.Model(&models.User{}).Preload("Histories").Find(&users).Error
+	err := database.DBConnection.Model(&models.User{}).Find(&users).Error
 
 	if err != nil {
 		c.Status(500)
@@ -41,7 +41,7 @@ func GetSingleUser(c *fiber.Ctx) error {
 
 	var user models.User
 
-	err := database.DBConnection.Model(&models.User{}).Preload("Histories").First(&user, "username = ?", username).Error
+	err := database.DBConnection.Model(&models.User{}).First(&user, "username = ?", username).Error
 
 	if err != nil {
 
@@ -63,7 +63,7 @@ func GetUserHimself(c *fiber.Ctx) error {
 
 	var user models.User
 
-	err := database.DBConnection.Model(&models.User{}).Preload("Histories").Find(&user, "username = ?", username).Error
+	err := database.DBConnection.Model(&models.User{}).Find(&user, "username = ?", username).Error
 
 	if err != nil {
 		c.Status(500)
