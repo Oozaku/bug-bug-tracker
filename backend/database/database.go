@@ -49,7 +49,7 @@ func OpenDatabaseConnection() {
 }
 
 func RunMigration(dbConnection *gorm.DB) {
-	error := dbConnection.AutoMigrate(&models.Issue{}, &models.User{}, &models.History{})
+	error := dbConnection.AutoMigrate(&models.Issue{}, &models.User{})
 
 	if error != nil {
 		log.Fatal("Could not run migration: ", error)

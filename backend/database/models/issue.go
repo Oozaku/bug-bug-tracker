@@ -11,5 +11,4 @@ type Issue struct {
 	Author         User
 	AuthorUsername string
 	Assignees      []User `gorm:"many2many:issue_assignees;"`
-	Histories      []History
 }
